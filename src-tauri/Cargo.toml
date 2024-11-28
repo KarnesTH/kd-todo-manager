@@ -1,8 +1,8 @@
 [package]
 name = "kd-todo-manager"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+description = "A todo manager app built with Tauri"
+authors = ["KarnesTH"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -22,4 +22,5 @@ tauri = { version = "2", features = [] }
 tauri-plugin-shell = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-
+dirs = "5.0.1"
+rusqlite = { version = "0.32.1", features = ["bundled"] }
