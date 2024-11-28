@@ -9,11 +9,13 @@ extern "C" {
 
 #[derive(Debug, Clone)]
 struct Todos {
-    todo_item: Vec<TodoItem>,
+    title: &'static str,
+    description: &'static str,
+    todo_tasks: Vec<TodoTasks>,
 }
 
 #[derive(Debug, Clone)]
-struct TodoItem {
+struct TodoTasks {
     title: &'static str,
     completed: bool,
     description: &'static str,
@@ -21,50 +23,50 @@ struct TodoItem {
 
 #[component]
 pub fn App() -> impl IntoView {
-    let todos = Todos {
-        todo_item: vec![
-            TodoItem {
-                title: "Learn Rust",
-                completed: true,
-                description: "Learn Rust Programming Language",
-            },
-            TodoItem {
-                title: "Learn Leptos",
-                completed: false,
-                description: "Learn Leptos Web Framework",
-            },
-            TodoItem {
-                title: "Learn WebAssembly",
-                completed: false,
-                description: "Learn WebAssembly Programming Language",
-            },
-        ],
-    };
+    let _todos = vec![
+        Todos {
+            title: "Todo 1",
+            description: "This is the first todo",
+            todo_tasks: vec![
+                TodoTasks {
+                    title: "Task 1",
+                    completed: false,
+                    description: "This is the first task",
+                },
+                TodoTasks {
+                    title: "Task 2",
+                    completed: true,
+                    description: "This is the second task",
+                },
+            ],
+        },
+        Todos {
+            title: "Todo 2",
+            description: "This is the second todo",
+            todo_tasks: vec![
+                TodoTasks {
+                    title: "Task 1",
+                    completed: false,
+                    description: "This is the first task",
+                },
+                TodoTasks {
+                    title: "Task 2",
+                    completed: true,
+                    description: "This is the second task",
+                },
+            ],
+        },
+    ];
 
     view! {
-        <main class="container">
-            <h1>"Todo Manager"</h1>
-
-            <div class="row">
-                <button>
-                    "Add Todo"
-                </button>
-                <button>
-                    "Filter"
+        <main class="container text-center mx-auto p-4">
+            <h1 class="text-4xl font-bold">"Todo Manager"</h1>
+            <div class="flex flex-row p-4">
+                <button class="flex bg-gray-600 p-2 rounded-full gap-2">
+                    <img src="public/icons/filter.svg" alt="Filter icon" class="w-6 h-6" />
+                    <span class="text-white font-bold">"Filter"</span>
                 </button>
             </div>
-
-            <ul>
-                {todos.todo_item.into_iter().map(|todo| view! {
-                    <li>
-                        <div class="row">
-                            <input type="checkbox" checked={todo.completed} />
-                            <h3>{todo.title}</h3>
-                        </div>
-                        <p>{todo.description}</p>
-                    </li>
-                }).collect_view()}
-            </ul>
         </main>
     }
 }
