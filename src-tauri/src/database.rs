@@ -83,4 +83,18 @@ impl Database {
 
         todos.collect()
     }
+
+    pub fn add_todo(&self, title: String, description: Option<String>) -> Result<Todo> {
+        let mut stmt = self.connection.prepare("INSERT INTO todos (title, description) VALUES (?1, ?2) RETURNING id, title, description, created_at, updated_at")?;
+
+        stmt.query_row(&[&title, &description as &dyn rusqlite::ToSql], |row| {
+            Ok(Todo {
+                id: row.get(0)?,
+                title: row.get(1)?,
+                description: row.get::<_, Option<String>>(2)?,
+                created_at: row.get(3)?,
+                updated_at: row.get(4)?,
+            })
+        })
+    }
 }
