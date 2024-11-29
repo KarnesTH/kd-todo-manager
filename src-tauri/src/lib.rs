@@ -13,6 +13,17 @@ pub struct NewTodo {
     description: Option<String>,
 }
 
+#[derive(Debug, Deserialize)]
+pub struct GetTodo {
+    id: u64,
+}
+
+#[tauri::command]
+fn get_todos(state: State<'_, DbState>) -> Result<Vec<Todo>, String> {
+    let db = state.0.lock().map_err(|_| "Failed to lock database")?;
+    db.get_todos().map_err(|e| e.to_string())
+}
+
 #[tauri::command]
 fn add_todo(state: State<'_, DbState>, new_todo: NewTodo) -> Result<Todo, String> {
     let db = state.0.lock().map_err(|_| "Failed to lock database")?;
@@ -21,9 +32,9 @@ fn add_todo(state: State<'_, DbState>, new_todo: NewTodo) -> Result<Todo, String
 }
 
 #[tauri::command]
-fn get_todos(state: State<'_, DbState>) -> Result<Vec<Todo>, String> {
+fn get_todo(state: State<'_, DbState>, todo: GetTodo) -> Result<Todo, String> {
     let db = state.0.lock().map_err(|_| "Failed to lock database")?;
-    db.get_todos().map_err(|e| e.to_string())
+    db.get_todo(todo.id).map_err(|e| e.to_string())
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -33,7 +44,7 @@ pub fn run() {
     tauri::Builder::default()
         .manage(DbState(Mutex::new(database)))
         .plugin(tauri_plugin_shell::init())
-        .invoke_handler(tauri::generate_handler![get_todos, add_todo])
+        .invoke_handler(tauri::generate_handler![get_todos, add_todo, get_todo])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

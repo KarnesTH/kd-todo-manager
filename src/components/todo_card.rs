@@ -1,11 +1,17 @@
 use leptos::*;
 
 #[component]
-pub fn TodoCard(title: String, description: String, is_add_card: bool) -> impl IntoView {
+pub fn TodoCard(
+    id: u64,
+    title: String,
+    description: String,
+    is_add_card: bool,
+    on_todo_click: Action<u64, ()>,
+) -> impl IntoView {
     let class_names = if is_add_card {
         "p-4 rounded-lg border-2 border-dashed border-primary-200 bg-background-card hover:shadow-lg transition-all duration-200"
     } else {
-        "p-4 rounded-lg border-2 border-solid border-primary-300 bg-background-card hover:shadow-lg transition-all duration-200"
+        "flex flex-col justify-center p-4 rounded-lg border-2 border-solid border-primary-300 bg-background-card hover:shadow-lg transition-all duration-200"
     };
 
     view! {
@@ -19,9 +25,14 @@ pub fn TodoCard(title: String, description: String, is_add_card: bool) -> impl I
                 }.into_view()
             } else {
                 view! {
-                    <h2 class="text-xl font-bold mb-2">{title}</h2>
-                    <p class="text-gray-600 mb-4">{description}</p>
-                    <button class="bg-gradient-primary text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity">
+                    <h2 class="text-2xl bg-gradient-primary text-transparent bg-clip-text text-center font-bold mb-2">{title.clone()}</h2>
+                    <p class="text-white mb-4">{description.clone()}</p>
+                    <button
+                        class="bg-gradient-primary text-white px-4 py-2 rounded-full hover:opacity-90 transition-opacity"
+                        on:click=move |_| {
+                            on_todo_click.dispatch(id);
+                        }
+                    >
                         "Go to Todo"
                     </button>
                 }.into_view()

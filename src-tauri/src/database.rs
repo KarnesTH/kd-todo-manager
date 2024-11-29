@@ -97,4 +97,20 @@ impl Database {
             })
         })
     }
+
+    pub fn get_todo(&self, id: u64) -> Result<Todo> {
+        let mut stmt = self.connection.prepare(
+            "SELECT id, title, description, created_at, updated_at FROM todos WHERE id = ?1",
+        )?;
+
+        stmt.query_row(&[&id], |row| {
+            Ok(Todo {
+                id: row.get(0)?,
+                title: row.get(1)?,
+                description: row.get(2)?,
+                created_at: row.get(3)?,
+                updated_at: row.get(4)?,
+            })
+        })
+    }
 }
