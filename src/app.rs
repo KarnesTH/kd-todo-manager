@@ -77,7 +77,7 @@ pub fn App() -> impl IntoView {
                     set_show_detail_modal.set(true);
                 }
                 Err(_) => {
-                    console_log("Error loading todo: {}");
+                    console_log("Error loading todo");
                 }
             }
         }

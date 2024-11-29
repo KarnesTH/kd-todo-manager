@@ -113,4 +113,18 @@ impl Database {
             })
         })
     }
+
+    pub fn update_todo(&self, title: String, description: Option<String>) -> Result<Todo> {
+        let mut stmt = self.connection.prepare("UPDATE todos SET title = ?1, description = ?2, updated_at = CURRENT_TIMESTAMP WHERE id = ?3 RETURNING id, title, description, created_at, updated_at")?;
+
+        stmt.query_row(&[&title, &description as &dyn rusqlite::ToSql], |row| {
+            Ok(Todo {
+                id: row.get(0)?,
+                title: row.get(1)?,
+                description: row.get::<_, Option<String>>(2)?,
+                created_at: row.get(3)?,
+                updated_at: row.get(4)?,
+            })
+        })
+    }
 }
