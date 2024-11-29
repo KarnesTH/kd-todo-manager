@@ -1,6 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["src/*/**.rs", "*.html", "src/components/*.rs", "src/*.rs"],
+  content: [
+    "src/*/**.rs",
+    "*.html",
+    "src/components/*.rs",
+    "src/*.rs",
+    "src/components/**/*.rs",
+  ],
   theme: {
     extend: {
       colors: {
@@ -16,7 +22,7 @@ module.exports = {
         },
       },
       backgroundImage: {
-        "gradient-primary": "linear-gradient(to right, #EE05F2, #6805F2)",
+        "gradient-primary": "linear-gradient(120deg, #EE05F2, #6805F2)",
       },
     },
   },

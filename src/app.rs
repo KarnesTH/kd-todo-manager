@@ -16,8 +16,10 @@ async fn get_todos() -> Result<Vec<Todo>, String> {
 
 async fn add_todo(title: String, description: Option<String>) -> Result<Todo, String> {
     let payload = to_value(&serde_json::json!({
-        "title": title,
-        "description": description,
+        "newTodo" : {
+            "title": title,
+            "description": description,
+        }
     }))
     .map_err(|e| e.to_string())?;
 
@@ -43,9 +45,7 @@ pub fn App() -> impl IntoView {
         async move {
             if let Ok(new_todo) = add_todo(title, description).await {
                 set_todos.update(|todos| {
-                    let mut updated = todos.clone();
-                    updated.push(new_todo);
-                    ()
+                    todos.push(new_todo);
                 });
             }
         }
@@ -90,13 +90,12 @@ pub fn App() -> impl IntoView {
                         is_add_card=true
                     />
                 </div>
+                <AddTodoModal
+                    show=show_add_modal
+                    set_show=set_show_add_modal
+                    on_save=handle_add_todo
+                />
             </div>
-
-            <AddTodoModal
-                show=show_add_modal
-                set_show=set_show_add_modal
-                on_save=handle_add_todo
-            />
         </main>
     }
 }
